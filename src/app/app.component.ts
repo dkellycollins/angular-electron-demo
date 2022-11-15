@@ -9,6 +9,10 @@ import { APP_CONFIG } from '../environments/environment';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+
+  public appName: string;
+  public appVersion: string;
+
   constructor(
     private electronService: ElectronService,
     private translate: TranslateService
@@ -24,5 +28,8 @@ export class AppComponent {
     } else {
       console.log('Run in browser');
     }
+
+    this.appName = this.electronService.app.getName();
+    this.appVersion = this.electronService.app.getVersion();
   }
 }
