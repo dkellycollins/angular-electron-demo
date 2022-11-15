@@ -1,7 +1,6 @@
-import {app, BrowserWindow, screen} from 'electron';
+import { app, BrowserWindow, screen, ipcMain } from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
-import { initialize, enable } from '@electron/remote/main';
 
 let win: BrowserWindow = null;
 const args = process.argv.slice(1),
@@ -23,8 +22,6 @@ function createWindow(): BrowserWindow {
       contextIsolation: false,  // false if you want to run e2e test with Spectron
     },
   });
-
-  enable(win.webContents);
 
   if (serve) {
     const debug = require('electron-debug');
@@ -58,13 +55,16 @@ function createWindow(): BrowserWindow {
 }
 
 try {
-  initialize();
-
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
   // Added 400 ms to fix the black background issue while using transparent window. More detais at https://github.com/electron/electron/issues/15947
-  app.on('ready', () => setTimeout(createWindow, 400));
+  app.on('ready', () => {
+    ipcMain.handle('app:name', () => app.getName());
+    ipcMain.handle('app:version', () => app.getVersion());
+
+    setTimeout(createWindow, 400);
+  });
 
   // Quit when all windows are closed.
   app.on('window-all-closed', () => {

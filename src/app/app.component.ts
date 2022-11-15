@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ElectronService } from './core/services';
 import { TranslateService } from '@ngx-translate/core';
 import { APP_CONFIG } from '../environments/environment';
@@ -8,7 +8,7 @@ import { APP_CONFIG } from '../environments/environment';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   public appName: string;
   public appVersion: string;
@@ -28,8 +28,10 @@ export class AppComponent {
     } else {
       console.log('Run in browser');
     }
+  }
 
-    this.appName = this.electronService.app.getName();
-    this.appVersion = this.electronService.app.getVersion();
+  public async ngOnInit(): Promise<void> {
+    this.appName = await this.electronService.ipcRenderer.invoke('app:name');
+    this.appVersion = await this.electronService.ipcRenderer.invoke('app:version');
   }
 }
