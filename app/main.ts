@@ -1,6 +1,7 @@
 import {app, BrowserWindow, screen} from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
+import { initialize, enable } from '@electron/remote/main';
 
 let win: BrowserWindow = null;
 const args = process.argv.slice(1),
@@ -22,6 +23,8 @@ function createWindow(): BrowserWindow {
       contextIsolation: false,  // false if you want to run e2e test with Spectron
     },
   });
+
+  enable(win.webContents);
 
   if (serve) {
     const debug = require('electron-debug');
@@ -55,6 +58,8 @@ function createWindow(): BrowserWindow {
 }
 
 try {
+  initialize();
+
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
