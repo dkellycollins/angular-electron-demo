@@ -1,4 +1,4 @@
-import { app, BrowserWindow, screen, ipcMain } from 'electron';
+import { app, BrowserWindow, screen, ipcMain, protocol } from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
 
@@ -62,6 +62,10 @@ try {
   app.on('ready', () => {
     ipcMain.handle('app:name', () => app.getName());
     ipcMain.handle('app:version', () => app.getVersion());
+
+    protocol.registerStringProtocol('test', (request, respond) => {
+      respond((Math.random() * 1000).toFixed(3));
+    });
 
     setTimeout(createWindow, 400);
   });

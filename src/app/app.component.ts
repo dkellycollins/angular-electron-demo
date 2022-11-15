@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ElectronService } from './core/services';
 import { TranslateService } from '@ngx-translate/core';
 import { APP_CONFIG } from '../environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -12,10 +14,12 @@ export class AppComponent implements OnInit {
 
   public appName: string;
   public appVersion: string;
+  public random$: Observable<string>;
 
   constructor(
     private electronService: ElectronService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private http: HttpClient
   ) {
     this.translate.setDefaultLang('en');
     console.log('APP_CONFIG', APP_CONFIG);
@@ -33,5 +37,6 @@ export class AppComponent implements OnInit {
   public async ngOnInit(): Promise<void> {
     this.appName = await this.electronService.ipcRenderer.invoke('app:name');
     this.appVersion = await this.electronService.ipcRenderer.invoke('app:version');
+    this.random$ = await this.http.get<string>('test://random');
   }
 }
