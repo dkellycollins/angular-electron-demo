@@ -12,7 +12,10 @@ let mainWindow = null;
   });
 
   mainWindow.loadURL(`file:${join(__dirname, 'dist/angular-electron-demo/index.html')}`);
-  mainWindow.webContents.openDevTools();
+
+  if (!app.isPackaged) {
+    mainWindow.webContents.openDevTools();
+  }
 
   mainWindow.on('closed', () => mainWindow = null);
   app.on('quit', mainWindow = null);
