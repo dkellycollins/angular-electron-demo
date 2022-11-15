@@ -7,6 +7,8 @@
     "start": "ng serve",
     "start:electron": "ng build --base-href ./ && electron .",
     "build": "ng build",
+    "prerelease": "ng build --base-href", 
+    "release": "electron-builder",
     "watch": "ng build --watch --configuration development"
   },
   "private": true,
@@ -28,6 +30,14 @@
     "@angular/cli": "~14.2.9",
     "@angular/compiler-cli": "^14.2.0",
     "electron": "^21.2.3",
+    "electron-builder": "^23.6.0",
     "typescript": "~4.7.2"
+  },
+  "build": {
+    "productName": "angular-electron-demo",
+    "files": [
+      "app.js",
+      "dist/angular-electron-demo"
+    ]
   }
 }
