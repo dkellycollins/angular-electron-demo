@@ -20,7 +20,6 @@ export class ElectronService {
     if (this.isElectron) {
       this.ipcRenderer = window.require('electron').ipcRenderer;
       this.webFrame = window.require('electron').webFrame;
-
       this.fs = window.require('fs');
 
       this.childProcess = window.require('child_process');
